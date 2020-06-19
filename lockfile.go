@@ -42,11 +42,12 @@ var (
 
 // New describes a new filename located at the given absolute path.
 func New(path string) (Lockfile, error) {
-	if !filepath.IsAbs(path) {
-		return Lockfile(""), ErrNeedAbsPath
+	absPath, err := filepath.Abs(path)
+	if err != nil {
+		return Lockfile(""), err
 	}
 
-	return Lockfile(path), nil
+	return Lockfile(absPath), nil
 }
 
 // GetOwner returns who owns the lockfile.
